@@ -1,0 +1,30 @@
+# Render Blueprint. Запускается как worker (long-polling).
+# Диск нужен, чтобы SQLite-база сохранялась между перезапусками (требует платного плана).
+services:
+  - type: worker
+    name: mntk-eye-bot
+    runtime: python
+    plan: starter
+    buildCommand: pip install -r requirements.txt
+    startCommand: python -m src.bot
+    disk:
+      name: data
+      mountPath: /opt/render/project/src/data
+      sizeGB: 1
+    envVars:
+      - key: DB_PATH
+        value: /opt/render/project/src/data/knowledge.db
+      - key: TELEGRAM_BOT_TOKEN
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: NCBI_EMAIL
+        sync: false
+      - key: NCBI_API_KEY
+        sync: false
+      - key: DIGEST_CHAT_ID
+        sync: false
+      - key: DIGEST_HOUR
+        value: "8"
+      - key: DIGEST_LOOKBACK_DAYS
+        value: "7"
