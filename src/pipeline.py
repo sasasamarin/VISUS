@@ -64,9 +64,9 @@ async def ingest() -> dict:
     stored: list[db.Document] = []
     rejected = 0
 
-    # 1) проверка + перевод (батчами по 20)
+    # 1) проверка + перевод (маленькими пачкам — так GPT отвечает по каждой статье)
     kept: list[db.Document] = []
-    EB = 20
+    EB = 6
     for i in range(0, len(new_docs), EB):
         batch = new_docs[i:i + EB]
         items = [
